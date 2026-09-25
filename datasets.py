@@ -1,13 +1,3 @@
-import os
-import numpy as np
-import nibabel as nib
-import torch
-from torch.utils.data import Dataset
-
-
-MODALITIES = ["flair", "t1", "t1ce", "t2"]
-
-
 class BraTSDataset(Dataset):
     def __init__(self, data_root, min_tumor_ratio=0.01, target_size=(224, 224)):
         self.data_root = data_root
@@ -15,27 +5,27 @@ class BraTSDataset(Dataset):
         self.target_size = target_size
 
         self.patient_ids = sorted(os.listdir(data_root))
-        self.index = []  # list of (patient_id, slice_idx)
+        self.index = []
 
         self._build_index()
 
-def _build_index(self):
-    for patient_id in self.patient_ids:
-        try:
-            seg_path = self._get_modality_path(patient_id, "seg")
-            seg_volume = nib.load(seg_path).get_fdata()
-        except (FileNotFoundError, Exception) as e:
-            print(f"Skipping patient {patient_id}: {e}")
-            continue
+    def _build_index(self):
+        for patient_id in self.patient_ids:
+            try:
+                seg_path = self._get_modality_path(patient_id, "seg")
+                seg_volume = nib.load(seg_path).get_fdata()
+            except (FileNotFoundError, Exception) as e:
+                print(f"Skipping patient {patient_id}: {e}")
+                continue
 
-        total_pixels = seg_volume.shape[0] * seg_volume.shape[1]
-        num_slices = seg_volume.shape[2]
+            total_pixels = seg_volume.shape[0] * seg_volume.shape[1]
+            num_slices = seg_volume.shape[2]
 
-        for slice_idx in range(num_slices):
-            tumor_pixels = np.count_nonzero(seg_volume[:, :, slice_idx])
-            ratio = tumor_pixels / total_pixels
-            if ratio >= self.min_tumor_ratio:
-                self.index.append((patient_id, slice_idx))
+            for slice_idx in range(num_slices):
+                tumor_pixels = np.count_nonzero(seg_volume[:, :, slice_idx])
+                ratio = tumor_pixels / total_pixels
+                if ratio >= self.min_tumor_ratio:
+                    self.index.append((patient_id, slice_idx))
 
     def _get_modality_path(self, patient_id, modality):
         filename = f"{patient_id}_{modality}.nii"
