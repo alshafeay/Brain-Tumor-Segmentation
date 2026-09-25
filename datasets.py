@@ -1,3 +1,13 @@
+import os
+import numpy as np
+import nibabel as nib
+import torch
+from torch.utils.data import Dataset
+
+
+MODALITIES = ["flair", "t1", "t1ce", "t2"]
+
+
 class BraTSDataset(Dataset):
     def __init__(self, data_root, min_tumor_ratio=0.01, target_size=(224, 224)):
         self.data_root = data_root
