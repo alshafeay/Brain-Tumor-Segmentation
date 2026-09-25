@@ -19,19 +19,23 @@ class BraTSDataset(Dataset):
 
         self._build_index()
 
-    def _build_index(self):
-        for patient_id in self.patient_ids:
+def _build_index(self):
+    for patient_id in self.patient_ids:
+        try:
             seg_path = self._get_modality_path(patient_id, "seg")
             seg_volume = nib.load(seg_path).get_fdata()
+        except (FileNotFoundError, Exception) as e:
+            print(f"Skipping patient {patient_id}: {e}")
+            continue
 
-            total_pixels = seg_volume.shape[0] * seg_volume.shape[1]
-            num_slices = seg_volume.shape[2]
+        total_pixels = seg_volume.shape[0] * seg_volume.shape[1]
+        num_slices = seg_volume.shape[2]
 
-            for slice_idx in range(num_slices):
-                tumor_pixels = np.count_nonzero(seg_volume[:, :, slice_idx])
-                ratio = tumor_pixels / total_pixels
-                if ratio >= self.min_tumor_ratio:
-                    self.index.append((patient_id, slice_idx))
+        for slice_idx in range(num_slices):
+            tumor_pixels = np.count_nonzero(seg_volume[:, :, slice_idx])
+            ratio = tumor_pixels / total_pixels
+            if ratio >= self.min_tumor_ratio:
+                self.index.append((patient_id, slice_idx))
 
     def _get_modality_path(self, patient_id, modality):
         filename = f"{patient_id}_{modality}.nii"
