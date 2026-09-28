@@ -1,7 +1,8 @@
 import torch
-from torch.optim import AdamW
-from torch.cuda.amp import autocast, GradScaler
+from torch.cuda.amp import autocast
 from tqdm import tqdm
+
+from losses import dice_score
 
 
 def train_one_epoch(model, loader, optimizer, criterion, scaler, device):
