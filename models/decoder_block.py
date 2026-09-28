@@ -36,11 +36,7 @@ class DecoderBlock(nn.Module):
         x = self.reduce_channels(x)
         x = self.norm(x)
 
-        B, H, W, C = x.shape
-        x = x.view(B, H * W, C)
-
         x = self.swin_block1(x)
         x = self.swin_block2(x)
 
-        x = x.view(B, H, W, C)
         return x
