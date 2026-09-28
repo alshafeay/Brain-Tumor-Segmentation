@@ -1,5 +1,5 @@
 import torch
-from torch.cuda.amp import autocast
+from torch.amp import autocast
 from tqdm import tqdm
 
 from losses import dice_score
@@ -15,7 +15,7 @@ def train_one_epoch(model, loader, optimizer, criterion, scaler, device):
 
         optimizer.zero_grad()
 
-        with autocast():
+        with autocast('cuda'):
             outputs = model(images)
             loss = criterion(outputs, masks)
 
@@ -38,7 +38,7 @@ def validate_one_epoch(model, loader, criterion, device):
             images = images.to(device)
             masks = masks.to(device)
 
-            with autocast():
+            with autocast('cuda'):
                 outputs = model(images)
                 loss = criterion(outputs, masks)
 
