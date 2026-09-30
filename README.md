@@ -166,20 +166,28 @@ Precision and Recall were both included deliberately (not just Dice/IoU) because
 
 ```
 Brain-Tumor-Segmentation/
-├── datasets.py            # BraTSDataset: loading, filtering, normalization
-├── losses.py               # DiceLoss, CombinedLoss
-├── metrics.py               # Dice, IoU, Precision, Recall, HD95
-├── train.py                  # train_one_epoch, validate_one_epoch
-├── evaluate.py                 # Full validation-set evaluation loop
-├── early_stopping.py            # EarlyStopping utility class
-├── models/
-│   ├── __init__.py
-│   ├── swin_encoder.py            # Pretrained Swin-Small, 4-channel patch embedding
-│   ├── patch_expanding.py          # Custom inverse of Patch Merging
-│   ├── decoder_block.py             # Patch Expand + skip fusion + Swin blocks
-│   └── swin_unet.py                  # Full model: encoder + decoder + segmentation head
-└── best_model.pt                      # Best checkpoint (by validation Dice)
+├── README.md
+├── notebooks/
+│   └── training_notebook.ipynb    # Full Kaggle notebook: data exploration, training, evaluation
+├── configs/
+│   └── config.yaml                 # All hyperparameters (data, model, training, loss) in one place
+├── datasets.py                      # BraTSDataset: loading, filtering, normalization
+├── losses.py                         # DiceLoss, CombinedLoss
+├── metrics.py                         # Dice, IoU, Precision, Recall, HD95
+├── train.py                            # train_one_epoch, validate_one_epoch
+├── evaluate.py                          # Full validation-set evaluation loop
+├── early_stopping.py                     # EarlyStopping utility class
+└── models/
+    ├── __init__.py
+    ├── swin_encoder.py                    # Pretrained Swin-Small, 4-channel patch embedding
+    ├── patch_expanding.py                  # Custom inverse of Patch Merging
+    ├── decoder_block.py                     # Patch Expand + skip fusion + Swin blocks
+    └── swin_unet.py                          # Full model: encoder + decoder + segmentation head
 ```
+
+**Note on model weights:** the trained checkpoint (`best_model.pt`) is not committed to this repository, since GitHub's per-file size limit (100 MB without Git LFS) is close to or below the checkpoint's size. The weights are instead hosted externally — see the link below.
+
+**Model checkpoint:** [it will be available soon]
 
 ## Engineering Workflow
 
