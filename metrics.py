@@ -68,9 +68,6 @@ def hausdorff_distance_95(pred_mask, gt_mask):
     if not pred_mask.any() or not gt_mask.any():
         return np.nan
 
-    pred_surface = pred_mask ^ distance_transform_edt(pred_mask) > 0
-    gt_surface = gt_mask ^ distance_transform_edt(gt_mask) > 0
-
     dt_gt = distance_transform_edt(~gt_mask)
     dt_pred = distance_transform_edt(~pred_mask)
 
