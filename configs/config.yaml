@@ -1,0 +1,23 @@
+data:
+  target_size: [224, 224]
+  min_tumor_ratio: 0.01
+  train_val_split: 0.85
+
+model:
+  backbone: swin_small_patch4_window7_224
+  in_channels: 4
+  num_classes: 1
+  window_size: 7
+
+training:
+  batch_size: 8
+  encoder_lr: 1e-5
+  decoder_lr: 1e-4
+  weight_decay: 1e-4
+  num_epochs: 50
+  early_stopping_patience: 5
+  early_stopping_min_delta: 0.001
+
+loss:
+  dice_weight: 0.5
+  bce_weight: 0.5
